@@ -1,0 +1,114 @@
+@keyframes no-no {
+  0% {
+    transform: translateX(0);
+  }
+  14% {
+    transform: translateX(-3px);
+  }
+  28% {
+    transform: translateX(0);
+  }
+  42% {
+    transform: translateX(3px);
+  }
+  56% {
+    transform: translateX(0);
+  }
+  84% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.button-box{
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+}
+
+.mail-button {
+  margin: 4px 2px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 10px 16px;
+  width: max-content;
+  /* min-height: 80px; */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.14s;
+  outline: none;
+}
+.mail-button:active {
+  transform: translateY(3px);
+}
+
+.mail-button:disabled {
+  cursor: not-allowed;
+}
+
+.mail-button:disabled:hover {
+  animation: no-no 0.24s forwards;
+}
+
+.button--primary {
+  box-shadow: 0 3px 0 0 #b89300;
+  background: #ffd633;
+  color: #383838;
+}
+
+.button--primary svg {
+  fill: #383838;
+}
+
+.button--primary:hover {
+  background: #ffe785;
+}
+
+.button--primary:active {
+  box-shadow: 0 0 0 0 #b89300;
+}
+
+.button--primary:disabled {
+  background: #ffefad;
+  box-shadow: 0 3px 0 0 #ffde5c;
+  color: #ffd633;
+}
+.button--primary:disabled svg {
+  fill: #ffd633;
+}
+
+
+.button--danger {
+  box-shadow: 0 3px 0 0 #921a11;
+  background: #e63b2e;
+  color: #fff;
+}
+.button--danger svg {
+  fill: #fff;
+}
+
+.button--danger:active {
+  box-shadow: 0 0 0 0 #921a11;
+}
+
+.button--danger:disabled {
+  background: #f9cbcb;
+  box-shadow: 0 3px 0 0 #f0877f;
+  color: #f4a9a4;
+}
+.button--danger:disabled svg {
+  fill: #f4a9a4;
+}
+
+.button--with-icon {
+  padding: 7px 8px;
+  min-width: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.button--with-icon svg {
+  width: 24px;
+}
