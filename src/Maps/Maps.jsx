@@ -34,7 +34,7 @@ const Maps = ({ apiKey }) => {
   const [playAlertSound] = useSound(alertSound);
 
   useEffect(() => {
-    const newSocket = io("https://roaring-gelato-152a0b.netlify.app:3001");
+    const newSocket = io("https://stms-server.vercel.app/");
     setSocket(newSocket);
 
     return () => {
@@ -58,7 +58,7 @@ const Maps = ({ apiKey }) => {
       await new Promise((resolve) => setTimeout(resolve, 5000));
 
       const response = await fetch(
-        `https://roaring-gelato-152a0b.netlify.app:3001/directions?origin=${origin}&destination=${destination}&isEmergency=${isEmergency}`
+        `https://stms-server.vercel.app/directions?origin=${origin}&destination=${destination}&isEmergency=${isEmergency}`
       );
       const data = await response.json();
       console.log(data);

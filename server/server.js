@@ -16,10 +16,14 @@ const io = socketIO(server, {
   },
 });
 
-const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || "AIzaSyDbenMSdy2YMf5GAQxlCIqwUA";
 
 // Store the active routes and their associated socket IDs
 const activeRoutes = {};
+
+app.get("/", (req, res) => {
+  res.send("<h1> Working Fine</h1>")
+});
 
 app.get('/directions', async (req, res) => {
   const { origin, destination } = req.query;
@@ -35,7 +39,6 @@ app.get('/directions', async (req, res) => {
     if (isEmergency) {
       // Get the socket IDs of users on the same route
       const socketIds = activeRoutes[`${origin}_${destination}`];
-      io.emit('emergency', { origin, destination });
 
       if (socketIds) {
         // Emit an emergency event to users on the same route
