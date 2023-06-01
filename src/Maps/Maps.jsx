@@ -34,7 +34,7 @@ const Maps = ({ apiKey }) => {
   const [playAlertSound] = useSound(alertSound);
 
   useEffect(() => {
-    const newSocket = io("https://stms-server.onrender.com/");
+    const newSocket = io("https://stms-server.onrender.com/directions");
     setSocket(newSocket);
 
     return () => {
@@ -67,6 +67,7 @@ const Maps = ({ apiKey }) => {
       if (isEmergency) {
         playAlertSound();
         socket.emit("emergency", { origin, destination });
+        console.log(`Emergency: ${origin}, ${destination}`);
       }
     } catch (error) {
       console.log(error);
