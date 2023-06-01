@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const socketIO = require('socket.io');
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
@@ -10,12 +11,12 @@ app.use(cors());
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: 'http://localhost:3000', // Replace with your frontend origin
+    origin: 'https://roaring-gelato-152a0b.netlify.app/', // Replace with your Netlify app URL
     methods: ['GET', 'POST'],
   },
 });
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyDbenMSdy2YMf5GAQxlCIqwUA-O6wbeimE';
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
 // Store the active routes and their associated socket IDs
 const activeRoutes = {};
@@ -35,10 +36,10 @@ app.get('/directions', async (req, res) => {
       // Get the socket IDs of users on the same route
       const socketIds = activeRoutes[`${origin}_${destination}`];
       io.emit('emergency', { origin, destination });
-      
+
       if (socketIds) {
         // Emit an emergency event to users on the same route
-        socketIds.forEach(socketId => {
+        socketIds.forEach((socketId) => {
           io.to(socketId).emit('emergencyAlert', { origin, destination });
         });
       }
@@ -77,7 +78,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const port = 3001;
+const port = process.env.PORT || 3001;
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
