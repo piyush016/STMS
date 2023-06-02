@@ -34,7 +34,7 @@ const Maps = ({ apiKey }) => {
   const [playAlertSound] = useSound(alertSound);
 
   useEffect(() => {
-    const newSocket = io("https://stms-server.onrender.com/directions");
+    const newSocket = io("http://localhost:3001");
     setSocket(newSocket);
 
     return () => {
@@ -58,7 +58,7 @@ const Maps = ({ apiKey }) => {
       await new Promise((resolve) => setTimeout(resolve, 5000));
 
       const response = await fetch(
-        `https://stms-server.onrender.com/directions?origin=${origin}&destination=${destination}&isEmergency=${isEmergency}`
+        `http://localhost:3001/directions?origin=${origin}&destination=${destination}&isEmergency=${isEmergency}`
       );
       const data = await response.json();
       console.log(data);
