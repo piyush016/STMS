@@ -166,6 +166,8 @@ const Maps = () => {
     }
   }, [socket, origin, destination, showEmergencyAlert]);
 
+  
+
   return (
     <div>
       <Box sx={{ display: "flex", height: "87vh" }}>
@@ -254,49 +256,62 @@ const Maps = () => {
               <Box sx={{ p: 2 }}>
                 <Stack spacing={2}>
                   <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                    Directions
+                    Route Information
                   </Typography>
                   <IconTextField
-                    label="Origin"
-                    placeholder="Enter origin"
+                    required
+                    id="outlined-required"
+                    label="Source"
+                    defaultValue="Source"
                     value={origin}
                     onChange={handleOriginChange}
-                    required
+                    iconEnd={
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          setOrigin(
+                            `${userLocation.latitude},${userLocation.longitude}`
+                          );
+                        }}
+                      >
+                        <MyLocationIcon />
+                      </IconButton>
+                    }
                   />
+
                   <IconTextField
+                    required
+                    id="outlined-required"
                     label="Destination"
-                    placeholder="Enter destination"
+                    defaultValue="Destination"
                     value={destination}
                     onChange={handleDestinationChange}
-                    required
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={isEmergency}
-                        onChange={(e) => setIsEmergency(e.target.checked)}
-                        color="primary"
-                      />
+                    iconEnd={
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          setDestination(
+                            `${userLocation.latitude},${userLocation.longitude}`
+                          );
+                        }}
+                      >
+                        <MyLocationIcon />
+                      </IconButton>
                     }
-                    label="Emergency"
+                  />
+
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="Emergency Services"
+                    checked={isEmergency}
+                    onChange={() => setIsEmergency(!isEmergency)}
                   />
                   <Button
                     variant="contained"
                     type="submit"
-                    color="primary"
-                    disabled={isLoading}
+                    disabled={!origin || !destination}
                   >
                     Get Directions
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    onClick={() => {
-                      setOrigin("");
-                      setDestination("");
-                    }}
-                    disabled={isLoading}
-                  >
-                    Clear
                   </Button>
                 </Stack>
               </Box>
@@ -304,22 +319,6 @@ const Maps = () => {
           </Box>
         </Drawer>
       </Box>
-
-      <IconButton
-        onClick={() => {
-          if (mapInstance && userLocation) {
-            mapInstance.setCenter(userLocation);
-          }
-        }}
-        sx={{
-          position: "fixed",
-          bottom: "10px",
-          right: "10px",
-          backgroundColor: "#ffffff",
-        }}
-      >
-        <MyLocationIcon />
-      </IconButton>
     </div>
   );
 };
