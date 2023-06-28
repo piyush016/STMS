@@ -5,13 +5,13 @@ import {getFirestore} from "firebase/firestore";
 import {getStorage} from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB6VlbwpdbFNJ7wrJG_vJKcAXG5IYfrKLI",
-  authDomain: "resume-builder-f4199.firebaseapp.com",
-  projectId: "resume-builder-f4199",
-  storageBucket: "resume-builder-f4199.appspot.com",
-  messagingSenderId: "340239128556",
-  appId: "1:340239128556:web:58d335b1a929005d07d2c9",
-  measurementId: "G-SSET9K2M08"
+  apiKey: "AIzaSyD2FfvJLpK-_CeW0vbcpAh_e3rgzEj0NMM",
+  authDomain: "traffic-management-74f3d.firebaseapp.com",
+  projectId: "traffic-management-74f3d",
+  storageBucket: "traffic-management-74f3d.appspot.com",
+  messagingSenderId: "972874750777",
+  appId: "1:972874750777:web:6518519f0d9f8de2efe6e8",
+  measurementId: "G-HX29W9E2B3"
 };
 
 // Initialize Firebase
