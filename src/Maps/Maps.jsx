@@ -13,14 +13,15 @@ import {
   Drawer,
   IconButton,
   FormControlLabel,
-  TextField,
 } from "@mui/material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CloseIcon from "@mui/icons-material/Close";
 import LoaderRoute from "../Loader/LoaderRoute";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
+import IconTextField from "../IconTextField/IconTextField";
 import { toast } from "react-toastify";
 
-const Maps = ({ apiKey }) => {
+const Maps = () => {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [isEmergency, setIsEmergency] = useState(false);
@@ -30,16 +31,36 @@ const Maps = ({ apiKey }) => {
   const [socket, setSocket] = useState(null);
   const [mapInstance, setMapInstance] = useState(null);
   const [currentAlert, setCurrentAlert] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
 
   const [playAlertSound] = useSound(alertSound);
 
   useEffect(() => {
-    const newSocket = io("https://stms-server.onrender.com/");
+    const newSocket = io("http://localhost:3001/");
     setSocket(newSocket);
 
     return () => {
       newSocket.disconnect();
     };
+  }, []);
+
+  useEffect(() => {
+    // Get user's location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error getting user's location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser");
+    }
   }, []);
 
   const handleOriginChange = (e) => {
@@ -58,7 +79,7 @@ const Maps = ({ apiKey }) => {
       await new Promise((resolve) => setTimeout(resolve, 5000));
 
       const response = await fetch(
-        `https://stms-server.onrender.com/directions?origin=${origin}&destination=${destination}&isEmergency=${isEmergency}`
+        `http://localhost:3001/directions?origin=${origin}&destination=${destination}&isEmergency=${isEmergency}`
       );
       const data = await response.json();
       console.log(data);
@@ -99,32 +120,35 @@ const Maps = ({ apiKey }) => {
     }
   }, [isLoading]);
 
-  const showEmergencyAlert = useCallback((origin, destination) => {
-    if (!currentAlert) {
-      setCurrentAlert({ origin, destination });
+  const showEmergencyAlert = useCallback(
+    (origin, destination) => {
+      if (!currentAlert) {
+        setCurrentAlert({ origin, destination });
 
-      toast.error(
-        <div>
-          <Typography variant="h6">Emergency Alert</Typography>
-          <Typography variant="body1">
-            Emergency vehicle approaching on route from <b>{origin}</b> to{" "}
-            <b>{destination}</b>
-          </Typography>
-        </div>,
-        {
-          position: "top-center",
-          autoClose: 10000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-          onClose: () => setCurrentAlert(null),
-        }
-      );
-    }
-  }, [currentAlert]);
+        toast.error(
+          <div>
+            <Typography variant="h6">Emergency Alert</Typography>
+            <Typography variant="body1">
+              Emergency vehicle approaching on route from <b>{origin}</b> to{" "}
+              <b>{destination}</b>
+            </Typography>
+          </div>,
+          {
+            position: "top-center",
+            autoClose: 7000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            onClose: () => setCurrentAlert(null),
+          }
+        );
+      }
+    },
+    [currentAlert]
+  );
 
   useEffect(() => {
     if (socket) {
@@ -141,6 +165,8 @@ const Maps = ({ apiKey }) => {
       };
     }
   }, [socket, origin, destination, showEmergencyAlert]);
+
+  
 
   return (
     <div>
@@ -161,7 +187,6 @@ const Maps = ({ apiKey }) => {
             ) : (
               <>
                 <Map
-                  apiKey={apiKey}
                   directions={directions}
                   origin={origin}
                   destination={destination}
@@ -233,21 +258,46 @@ const Maps = ({ apiKey }) => {
                   <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                     Route Information
                   </Typography>
-                  <TextField
+                  <IconTextField
                     required
                     id="outlined-required"
                     label="Source"
                     defaultValue="Source"
                     value={origin}
                     onChange={handleOriginChange}
+                    iconEnd={
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          setOrigin(
+                            `${userLocation.latitude},${userLocation.longitude}`
+                          );
+                        }}
+                      >
+                        <MyLocationIcon />
+                      </IconButton>
+                    }
                   />
-                  <TextField
+
+                  <IconTextField
                     required
                     id="outlined-required"
                     label="Destination"
                     defaultValue="Destination"
                     value={destination}
                     onChange={handleDestinationChange}
+                    iconEnd={
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          setDestination(
+                            `${userLocation.latitude},${userLocation.longitude}`
+                          );
+                        }}
+                      >
+                        <MyLocationIcon />
+                      </IconButton>
+                    }
                   />
 
                   <FormControlLabel
@@ -269,7 +319,6 @@ const Maps = ({ apiKey }) => {
           </Box>
         </Drawer>
       </Box>
-
     </div>
   );
 };

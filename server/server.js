@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const socketIO = require('socket.io');
-const BASE_URL = 'https://roaring-gelato-152a0b.netlify.app/';
+const BASE_URL = 'http://localhost:3000';
 const app = express();
 app.use(cors());
 

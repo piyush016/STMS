@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-function Map({ apiKey, origin, destination }) {
+function Map({ origin, destination }) {
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -8,7 +8,6 @@ function Map({ apiKey, origin, destination }) {
     const directionsRenderer = new window.google.maps.DirectionsRenderer();
 
     const map = new window.google.maps.Map(mapRef.current, {
-      center: { lat: 12.9716, lng: 77.5946 },
       zoom: 12,
     });
 
@@ -27,7 +26,24 @@ function Map({ apiKey, origin, destination }) {
         }
       });
     }
-  }, [apiKey, origin, destination]);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          map.setCenter({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error("Error getting user's location:", error);
+          // Set default center for India
+          map.setCenter({ lat: 20.5937, lng: 78.9629 });
+        }
+      );
+    } else {
+      // Set default center for India if geolocation is not supported
+      map.setCenter({ lat: 20.5937, lng: 78.9629 });
+    }
+  }, [origin, destination]);
 
   return <div ref={mapRef} style={{ height: "100%", width: "100%" }} />;
 }

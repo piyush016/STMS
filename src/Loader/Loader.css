@@ -47,7 +47,7 @@
   .loader-container {
 	background: var(--background-color);
 	font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", Tahoma, Sans-Serif;
-	height: 95vh;
+	height: 100vh;
 	display: flex;
 	align-items: center;
 	justify-content: center;
