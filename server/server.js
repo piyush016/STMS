@@ -6,7 +6,6 @@ const axios = require('axios');
 
 const app = express();
 
-const BASE_URL = 'http://localhost:3000';
 app.use(cors());
 
 const server = http.createServer(app);
